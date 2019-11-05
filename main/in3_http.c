@@ -165,7 +165,7 @@ void in3_task_blk_number(void *pvParameters)
     vTaskDelete(NULL);
 }
 
-/* Simple handler for getting system handler */
+/* GET endpoint /api/access rest handler for in3 request */
 static esp_err_t exec_get_handler(httpd_req_t *req)
 {
     // trigger freertos task to process in3 calls and cache the result in 
@@ -180,6 +180,7 @@ static esp_err_t exec_get_handler(httpd_req_t *req)
     return ESP_OK;
 }
 
+/* GET endpoint /api/retrieve rest handler for in3 requests */
 static esp_err_t retrieve_get_handler(httpd_req_t *req)
 {
     httpd_resp_set_type(req, "application/json");
@@ -192,7 +193,7 @@ static esp_err_t retrieve_get_handler(httpd_req_t *req)
     return ESP_OK;
 }
 
-
+/* Setup and init in3 */
 void init_in3(void)
 {
     // init in3
@@ -207,7 +208,7 @@ void init_in3(void)
     c->chainId = 0x5; // use kovan
     in3_log_set_level(LOG_TRACE);
 }
-
+/* setup and init local http rest server */
 esp_err_t start_rest_server(void)
 {
     httpd_handle_t server = NULL;

@@ -84,10 +84,15 @@ in3 will support a variety on microcontrollers for this we will use well known e
 4. To setup the password and ssid of your network, go to kconfig esp menu with: 
 `idf.py menuconfig`
 then select component config
+
 ![](https://i.imgur.com/iVtqGig.png)
-then in3 at then end of the list, 
+
+then select in3 at then end of the list, 
+
 ![](https://i.imgur.com/uIPhf9l.png)
+
 then you will will be able to input your credentials and be safe you are not hardcoding them in your code
+
 ![](https://i.imgur.com/6AtcPFA.png)
 
 
