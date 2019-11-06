@@ -28,7 +28,7 @@ You want to enable this in your application as an example of how in3 can help yo
 
 **Hardware requirements**
 
-![from https://docs.espressif.com/projects/esp-idf/en/stable/get-started/](https://i.imgur.com/IVgORi4.png)
+![from https://docs.espressif.com/projects/esp-idf/en/stable/get-started/](https://git.slock.it/hardware/esp_idf/in3-espidf/raw/1-use-local-images-instead-of-external-links-for-readme-md/embedded_esp.png)
 
 
 * [ESP32-DevKitC V4](https://docs.espressif.com/projects/esp-idf/en/latest/hw-reference/get-started-devkitc.html) or similar dev board
@@ -65,7 +65,7 @@ contract Access {
 **How it works**
 
 
-![sequence diagram](https://i.imgur.com/l36Yobm.png)
+![sequence diagram](https://git.slock.it/hardware/esp_idf/in3-espidf/raw/1-use-local-images-instead-of-external-links-for-readme-md/embedded_diagram.png)
 
 
 In3 will support a wide range of microcontrollers, in this guide we will use well-known esp32 with freertos framework, and an example android app to interact with it via Wifi connection. 
@@ -75,7 +75,7 @@ In3 will support a wide range of microcontrollers, in this guide we will use wel
 
 `git clone https://github.com/slockit/in3-devices-esp `
 
-2. Follow [esp-idf](https://) instructions to setup your environment
+2. Follow [esp-idf](https://docs.espressif.com/projects/esp-idf/en/stable/get-started/) instructions to setup your environment
 
 
 3. Deploy the contract with your favorite tool (truffle, etc) or use our previously deployed contract on Goerli testnet, with address `0x36643F8D17FE745a69A2Fd22188921Fade60a98B`
@@ -86,17 +86,17 @@ In3 will support a wide range of microcontrollers, in this guide we will use wel
 `idf.py menuconfig`
 then select component config
 
-![menuconfig1(https://i.imgur.com/iVtqGig.png)
+![menuconfig1(https://git.slock.it/hardware/esp_idf/in3-espidf/raw/1-use-local-images-instead-of-external-links-for-readme-md/componentconfig.png)
 
 
 then in3 at then end of the list:
 
-![menuconfig2](https://i.imgur.com/uIPhf9l.png)
+![menuconfig2](https://git.slock.it/hardware/esp_idf/in3-espidf/raw/1-use-local-images-instead-of-external-links-for-readme-md/in3menu.png)
 
 
 then you will be able to input your credentials and be safe you are not hardcoding them in your code!:
 
-![menuconfig3](https://i.imgur.com/6AtcPFA.png)
+![menuconfig3](https://git.slock.it/hardware/esp_idf/in3-espidf/raw/1-use-local-images-instead-of-external-links-for-readme-md/wifi.png)
 
 
 5. Build the code
