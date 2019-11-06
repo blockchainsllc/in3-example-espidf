@@ -28,7 +28,7 @@ You want to enable this in your application as an example of how in3 can help yo
 
 **Hardware requirements**
 
-![from https://docs.espressif.com/projects/esp-idf/en/stable/get-started/](https://i.imgur.com/IVgORi4.png)
+![from https://docs.espressif.com/projects/esp-idf/en/stable/get-started/](https://git.slock.it/hardware/esp_idf/in3-espidf/raw/1-use-local-images-instead-of-external-links-for-readme-md/embedded_esp.png)
 
 
 * [ESP32-DevKitC V4](https://docs.espressif.com/projects/esp-idf/en/latest/hw-reference/get-started-devkitc.html) or similar dev board
@@ -75,7 +75,7 @@ In3 will support a wide range of microcontrollers, in this guide we will use wel
 
 `git clone https://github.com/slockit/in3-devices-esp `
 
-2. Follow [esp-idf](https://) instructions to setup your environment
+2. Follow [esp-idf](https://docs.espressif.com/projects/esp-idf/en/stable/get-started/) instructions to setup your environment
 
 
 3. Deploy the contract with your favorite tool (truffle, etc) or use our previously deployed contract on Goerli testnet, with address `0x36643F8D17FE745a69A2Fd22188921Fade60a98B`
