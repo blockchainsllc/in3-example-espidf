@@ -28,7 +28,7 @@ You want to enable this in your application as an example of how in3 can help yo
 
 **Hardware requirements**
 
-![from https://docs.espressif.com/projects/esp-idf/en/stable/get-started/](https://git.slock.it/hardware/esp_idf/in3-espidf/raw/1-use-local-images-instead-of-external-links-for-readme-md/embedded_esp.png)
+![from https://docs.espressif.com/projects/esp-idf/en/stable/get-started/](https://git.slock.it/hardware/esp_idf/in3-espidf/raw/master/embedded_esp.png)
 
 
 * [ESP32-DevKitC V4](https://docs.espressif.com/projects/esp-idf/en/latest/hw-reference/get-started-devkitc.html) or similar dev board
@@ -65,7 +65,7 @@ contract Access {
 **How it works**
 
 
-![sequence diagram](https://git.slock.it/hardware/esp_idf/in3-espidf/raw/1-use-local-images-instead-of-external-links-for-readme-md/embedded_diagram.png)
+![sequence diagram](https://git.slock.it/hardware/esp_idf/in3-espidf/raw/master/embedded_diagram.png)
 
 
 In3 will support a wide range of microcontrollers, in this guide we will use well-known esp32 with freertos framework, and an example android app to interact with it via Wifi connection. 
@@ -86,17 +86,17 @@ In3 will support a wide range of microcontrollers, in this guide we will use wel
 `idf.py menuconfig`
 then select component config
 
-![menuconfig1(https://git.slock.it/hardware/esp_idf/in3-espidf/raw/1-use-local-images-instead-of-external-links-for-readme-md/componentconfig.png)
+![menuconfig1](https://git.slock.it/hardware/esp_idf/in3-espidf/raw/master/componentconfig.png)
+
+then select in3, at then end of the list:
 
 
-then in3 at then end of the list:
-
-![menuconfig2](https://git.slock.it/hardware/esp_idf/in3-espidf/raw/1-use-local-images-instead-of-external-links-for-readme-md/in3menu.png)
-
+![menuconfig2](https://git.slock.it/hardware/esp_idf/in3-espidf/raw/master/in3menu.png)
 
 then you will be able to input your credentials and be safe you are not hardcoding them in your code!:
 
-![menuconfig3](https://git.slock.it/hardware/esp_idf/in3-espidf/raw/1-use-local-images-instead-of-external-links-for-readme-md/wifi.png)
+
+![menuconfig3](https://git.slock.it/hardware/esp_idf/in3-espidf/raw/master/wifi.png)
 
 
 5. Build the code
