@@ -65,7 +65,7 @@ contract Access {
 **How it works**
 
 
-![sequence diagram](https://i.imgur.com/l36Yobm.png)
+![sequence diagram](https://git.slock.it/hardware/esp_idf/in3-espidf/raw/1-use-local-images-instead-of-external-links-for-readme-md/embedded_diagram.png)
 
 
 In3 will support a wide range of microcontrollers, in this guide we will use well-known esp32 with freertos framework, and an example android app to interact with it via Wifi connection. 
@@ -86,17 +86,17 @@ In3 will support a wide range of microcontrollers, in this guide we will use wel
 `idf.py menuconfig`
 then select component config
 
-![menuconfig1(https://i.imgur.com/iVtqGig.png)
+![menuconfig1(https://git.slock.it/hardware/esp_idf/in3-espidf/raw/1-use-local-images-instead-of-external-links-for-readme-md/componentconfig.png)
 
 
 then in3 at then end of the list:
 
-![menuconfig2](https://i.imgur.com/uIPhf9l.png)
+![menuconfig2](https://git.slock.it/hardware/esp_idf/in3-espidf/raw/1-use-local-images-instead-of-external-links-for-readme-md/in3menu.png)
 
 
 then you will be able to input your credentials and be safe you are not hardcoding them in your code!:
 
-![menuconfig3](https://i.imgur.com/6AtcPFA.png)
+![menuconfig3](https://git.slock.it/hardware/esp_idf/in3-espidf/raw/1-use-local-images-instead-of-external-links-for-readme-md/wifi.png)
 
 
 5. Build the code
