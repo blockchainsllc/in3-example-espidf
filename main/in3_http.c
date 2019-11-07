@@ -46,8 +46,12 @@
 #include "util/stringbuilder.h"
 #include "util/log.h"
 
+#include "client/client.h"
+
 #include <in3/eth_full.h> // the full ethereum verifier containing the EVM
 #include <in3/eth_api.h> // wrapper for easier use
+
+
 static const char *REST_TAG = "esp-rest";
 static sb_t *http_in3_buffer = NULL;
 static in3_t *c;
@@ -119,17 +123,7 @@ void send_request(char *url, char *payload)
     }
 }
 
-/* Perform in3 requests for http transport */
-in3_ret_t transport_esphttp(char **urls, int urls_len, char *payload, in3_response_t *result)
-{
 
-    for (int i = 0; i < urls_len; i++){
-        send_request(urls[i], payload);
-        sb_add_range(&(result[i].result), http_in3_buffer->data, 0, http_in3_buffer->len);
-        ESP_LOGI(TAG, "RESPONSE data = %s len =%d ", http_in3_buffer->data, http_in3_buffer->len);
-    }
-    return 0;
-}
 /* Freertos task for evm call requests */
 void in3_task_evm(void *pvParameters)
 {
@@ -192,6 +186,17 @@ static esp_err_t retrieve_get_handler(httpd_req_t *req)
     cJSON_Delete(root);
     return ESP_OK;
 }
+/* Perform in3 requests for http transport */
+static in3_ret_t transport_esphttp(in3_request_t* req)
+{
+
+    for (int i = 0; i < req->urls_len; i++){
+        send_request( req->urls[i], req->payload);
+        sb_add_range(&req->results[i].result, http_in3_buffer->data, 0, http_in3_buffer->len);
+        //ESP_LOGI(TAG, "RESPONSE data = %s len =%d ", http_in3_buffer->data, http_in3_buffer->len);
+    }
+    return 0;
+}
 
 /* Setup and init in3 */
 void init_in3(void)
@@ -199,7 +204,7 @@ void init_in3(void)
     // init in3
     c = in3_new();
     in3_register_eth_full();
-    c->transport = transport_esphttp; // use curl to handle the requests
+    c->transport = transport_esphttp; // use esp_idf_http client to handle the requests
     c->requestCount = 1;           // number of requests to sendp
     c->includeCode = 1;
     //c->use_binary = 1;
