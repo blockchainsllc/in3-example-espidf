@@ -47,6 +47,7 @@
 #include "driver/sdmmc_host.h"
 #include "cJSON.h"
 #include "sdkconfig.h"
+#include "nvs_flash.h"
 
 #define CONNECT_MAXIMUM_RETRY 2
 
@@ -106,11 +107,12 @@ static void event_handler(void *arg, esp_event_base_t event_base,
     }
 }
 
-/* FreeRTOS event group to signal when we are connected*/
+/* Wifi initialization */
 void wifi_init(void)
 {
     // events init
     s_wifi_event_group = xEventGroupCreate();
+    nvs_flash_init();
     tcpip_adapter_init();
     ESP_ERROR_CHECK(esp_event_loop_create_default());
     // wifi init
