@@ -1,6 +1,6 @@
 /*******************************************************************************
  * This file is part of the Incubed project.
- * Sources: https://github.com/slockit/in3-c
+ * Sources:  https://github.com/slockit/in3-example-espidf
  * 
  * Copyright (C) 2018-2019 slock.it GmbH, Blockchains LLC
  * 
@@ -53,7 +53,9 @@
 
 
 static const char *REST_TAG = "esp-rest";
+//buffer to receive data from in3 http transport
 static sb_t *http_in3_buffer = NULL;
+// in3 client
 static in3_t *c;
 static const char *TAG = "IN3";
 

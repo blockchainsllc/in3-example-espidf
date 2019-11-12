@@ -1,22 +1,4 @@
-# Embedded Devices
-
-
-## Hardware Requirements
-### Memory 
-
-
-| Memory type                 | Free size KB |
-| ------------------------ | -------- |
-| **Dynamic memory(DRAM)** | 30 - 50   |
-| **Flash Memory**         | 150 - 200   |
-
-
-### Networking
-In3 client needs to have a reliable internet connection to work properly, so your hardware must support any network interface or module that could give you access to it. i.e  Bluetooth, Wifi, ethernet, etc.
-        
 ## Incubed with ESP-IDF
-
-
 
 ### Use case example: Airbnb Property access
 
