@@ -136,11 +136,12 @@ void wifi_init(void)
     ESP_LOGI(TAG, "connect to ap SSID:%s password:%s",
              CONFIG_WIFI_SSID, CONFIG_WIFI_PASSWORD);
 }
-
+/*Application main entry point*/
 void app_main()
 {
 
     ESP_LOGI(TAG, "ESP_WIFI_MODE_STA");
+    // init wifi connection 
     wifi_init();
     
 }
