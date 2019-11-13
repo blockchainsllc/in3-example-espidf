@@ -42,24 +42,24 @@
 #include "esp_http_client.h"
 #include <esp_log.h>
 #include "freertos/task.h"
-#include "util/debug.h"
-#include "util/stringbuilder.h"
-#include "util/log.h"
 
-#include "client/client.h"
 
 #include <in3/eth_full.h> // the full ethereum verifier containing the EVM
-#include <in3/eth_api.h> // wrapper for easier use
-
-
+#include <in3/eth_api.h> // wrapper around rpc eth api
+#include <in3/client.h> // in3 client
+#include <in3/stringbuilder.h> // stringbuilder tool for dynamic memory string handling
 static const char *REST_TAG = "esp-rest";
 //buffer to receive data from in3 http transport
 static sb_t *http_in3_buffer = NULL;
 // in3 client
-static in3_t *c;
+static in3_t *c;    
 static const char *TAG = "IN3";
-
-/* http event handler  */
+// header for in3 setup
+void init_in3(void);
+/**
+ * ESP HTTP Client configuration and request
+ * **/
+/* http client event handler  */
 esp_err_t s_http_event_handler(esp_http_client_event_t *evt)
 {
     switch (evt->event_id)
@@ -126,6 +126,9 @@ void send_request(char *url, char *payload)
 }
 
 
+/**
+ * FreeRTOS Tasks
+ * **/
 /* Freertos task for evm call requests */
 void in3_task_evm(void *pvParameters)
 {
@@ -135,12 +138,12 @@ void in3_task_evm(void *pvParameters)
     //ask for the access to the lock
     json_ctx_t *response = eth_call_fn(c, contract, BLKNUM_LATEST(), "hasAccess():bool");
     if (!response){
-        dbg_log("Could not get the response: %s", eth_last_error());
+        ESP_LOGI(REST_TAG, "Could not get the response: %s", eth_last_error());
         return;
     }
     // convert the response to a uint32_t,
     uint8_t access = d_int(response->result);
-    dbg_log("Access granted? : %d %s %d\n", access);
+    ESP_LOGI(TAG, "Access granted? : %d \n", access);
 
     // clean up resources
     free_json(response);
@@ -152,15 +155,19 @@ void in3_task_blk_number(void *pvParameters)
 {
     eth_block_t *block = eth_getBlockByNumber(c, BLKNUM(6970454), true);
     if (!block)
-        dbg_log("Could not find the Block: %s\n", eth_last_error());
+        ESP_LOGI(TAG, "Could not find the Block: %s\n", eth_last_error());
     else
     {
-        ESP_LOGI(REST_TAG, "Number of verified transactions in block: %d\n", block->tx_count);
+        ESP_LOGI(TAG, "Number of verified transactions in block: %d\n", block->tx_count);
         free(block);
     }
     vTaskDelete(NULL);
 }
 
+
+/**
+ * Local ESP HTTP server 
+ * **/
 /* GET endpoint /api/access rest handler for in3 request */
 static esp_err_t exec_get_handler(httpd_req_t *req)
 {
@@ -187,33 +194,6 @@ static esp_err_t retrieve_get_handler(httpd_req_t *req)
     free((void *)slock_ret);
     cJSON_Delete(root);
     return ESP_OK;
-}
-/* Perform in3 requests for http transport */
-static in3_ret_t transport_esphttp(in3_request_t* req)
-{
-
-    for (int i = 0; i < req->urls_len; i++){
-        send_request( req->urls[i], req->payload);
-        sb_add_range(&req->results[i].result, http_in3_buffer->data, 0, http_in3_buffer->len);
-        //ESP_LOGI(TAG, "RESPONSE data = %s len =%d ", http_in3_buffer->data, http_in3_buffer->len);
-    }
-    return 0;
-}
-
-/* Setup and init in3 */
-void init_in3(void)
-{
-    // init in3
-    c = in3_new();
-    in3_register_eth_full();
-    c->transport = transport_esphttp; // use esp_idf_http client to handle the requests
-    c->requestCount = 1;           // number of requests to sendp
-    c->includeCode = 1;
-    //c->use_binary = 1;
-    c->proof = PROOF_FULL;
-    c->max_attempts = 1;
-    c->chainId = 0x5; // use kovan
-    in3_log_set_level(LOG_TRACE);
 }
 /* setup and init local http rest server */
 esp_err_t start_rest_server(void)
@@ -244,3 +224,31 @@ esp_err_t start_rest_server(void)
     }
     return ESP_OK;
 }
+/**
+ * In3 Setup and usage
+ * **/
+/* Perform in3 requests for http transport */
+static in3_ret_t transport_esphttp(in3_request_t* req)
+{
+
+    for (int i = 0; i < req->urls_len; i++){
+        send_request( req->urls[i], req->payload);
+        sb_add_range(&req->results[i].result, http_in3_buffer->data, 0, http_in3_buffer->len);
+    }
+    return 0;
+}
+/* Setup and init in3 */
+void init_in3(void)
+{
+    // init in3
+    c = in3_new();
+    in3_register_eth_full();
+    c->transport = transport_esphttp; // use esp_idf_http client to handle the requests
+    c->requestCount = 1;           // number of requests to sendp
+    c->includeCode = 1;
+    //c->use_binary = 1;
+    c->proof = PROOF_FULL;
+    c->max_attempts = 1;
+    c->chainId = 0x5; // use kovan
+}
+
