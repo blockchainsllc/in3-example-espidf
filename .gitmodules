@@ -1,3 +1,5 @@
 [submodule "main/in3-core"]
 	path = main/in3-core
+	branch = master
+	shallow = true
 	url = git@git.slock.it:in3/c/in3-core.git

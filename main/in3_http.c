@@ -202,15 +202,14 @@ static in3_ret_t transport_esphttp(in3_request_t* req)
 void init_in3(void)
 {
     // init in3
-    c = in3_new();
+    c = in3_for_chain(ETH_CHAIN_ID_GOERLI);
     in3_register_eth_full();
     c->transport = transport_esphttp; // use esp_idf_http client to handle the requests
-    c->requestCount = 1;           // number of requests to sendp
-    c->includeCode = 1;
+    c->request_count = 1;           // number of requests to sendp
+    c->include_code = 1;
     //c->use_binary = 1;
     c->proof = PROOF_FULL;
     c->max_attempts = 1;
-    c->chainId = 0x5; // use kovan
     in3_log_set_level(LOG_TRACE);
 }
 /* setup and init local http rest server */
