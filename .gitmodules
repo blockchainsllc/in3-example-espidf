@@ -2,4 +2,4 @@
 	path = main/in3-core
 	branch = master
 	shallow = true
-	url = git@git.slock.it:in3/c/in3-core.git
+	url = https://github.com/slockit/in3-c.git
