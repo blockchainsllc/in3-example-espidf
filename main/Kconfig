@@ -11,4 +11,11 @@ menu "IN3"
         help
             WiFi password (WPA or WPA2) for the example to use.
             Can be left blank if the network has no security set.
+
+    config CONTRACT_ADDRESS
+        string "Address to deployed contract"
+        default "0x36643F8D17FE745a69A2Fd22188921Fade60a98B"
+        help
+            Deploy the contract with your favorite tool (ie truffle, etc) 
+            or use our previously deployed contract on goerli using the default address.
 endmenu
