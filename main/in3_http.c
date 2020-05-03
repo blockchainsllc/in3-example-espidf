@@ -129,7 +129,7 @@ void in3_task_evm(void *pvParameters)
 {
     address_t contract;
     // setup lock access contract address to be excuted with eth_call
-    hex2byte_arr("0x36643F8D17FE745a69A2Fd22188921Fade60a98B", -1, contract, 20);
+    hex2byte_arr(CONFIG_CONTRACT_ADDRESS, -1, contract, 20);
     //ask for the access to the lock
     json_ctx_t *response = eth_call_fn(c, contract, BLKNUM_LATEST(), "hasAccess():bool");
     if (!response){
