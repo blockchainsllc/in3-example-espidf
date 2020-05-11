@@ -44,9 +44,15 @@
 #include "freertos/task.h"
 
 
-#include <in3/eth_full.h> // the full ethereum verifier containing the EVM
-#include <in3/eth_api.h> // wrapper around rpc eth api
-#include <in3/client.h> // in3 client
+
+#include <in3/client.h>   // the core client
+#include <in3/eth_api.h>  // functions for direct api-access
+#include <in3/in3_init.h> // if included the verifier will automaticly be initialized.
+#include <in3/log.h>      // logging functions
+#include <in3/signer.h>   // default signer implementation
+#include <in3/utils.h>
+#include <stdio.h>
+
 #include <in3/stringbuilder.h> // stringbuilder tool for dynamic memory string handling
 static const char *REST_TAG = "esp-rest";
 //buffer to receive data from in3 http transport
@@ -134,19 +140,21 @@ void in3_task_evm(void *pvParameters)
 {
     address_t contract;
     // setup lock access contract address to be excuted with eth_call
-    hex2byte_arr("0x36643F8D17FE745a69A2Fd22188921Fade60a98B", -1, contract, 20);
+    hex_to_bytes("0x36643F8D17FE745a69A2Fd22188921Fade60a98B", -1, contract, 20);
     //ask for the access to the lock
     json_ctx_t *response = eth_call_fn(c, contract, BLKNUM_LATEST(), "hasAccess():bool");
     if (!response){
         ESP_LOGI(REST_TAG, "Could not get the response: %s", eth_last_error());
-        return;
     }
-    // convert the response to a uint32_t,
-    uint8_t access = d_int(response->result);
-    ESP_LOGI(TAG, "Access granted? : %d \n", access);
+    else{
+        // convert the response to a uint32_t,
+        uint8_t access = d_int(response->result);
+        ESP_LOGI(TAG, "Access granted? : %d \n", access);
 
-    // clean up resources
-    free_json(response);
+        // clean up resources
+        json_free(response);
+    }
+    
     vTaskDelete(NULL);
 }
 
@@ -230,8 +238,10 @@ esp_err_t start_rest_server(void)
 /* Perform in3 requests for http transport */
 static in3_ret_t transport_esphttp(in3_request_t* req)
 {
-
+    ESP_LOGI(REST_TAG, "in 3 transport");
+    
     for (int i = 0; i < req->urls_len; i++){
+        ESP_LOGI(REST_TAG, "url:%s \n payload:%s \n", req->urls[i], req->payload);
         send_request( req->urls[i], req->payload);
         sb_add_range(&req->results[i].result, http_in3_buffer->data, 0, http_in3_buffer->len);
     }
@@ -240,15 +250,17 @@ static in3_ret_t transport_esphttp(in3_request_t* req)
 /* Setup and init in3 */
 void init_in3(void)
 {
+    in3_log_set_quiet(false);
+    in3_log_set_level(LOG_TRACE);
+    // in3_register_eth_full();
     // init in3
-    c = in3_new();
-    in3_register_eth_full();
+    c = in3_for_chain(ETH_CHAIN_ID_GOERLI);
     c->transport = transport_esphttp; // use esp_idf_http client to handle the requests
-    c->requestCount = 1;           // number of requests to sendp
-    c->includeCode = 1;
+    c->request_count = 1;           // number of requests to sendp
     //c->use_binary = 1;
     c->proof = PROOF_FULL;
     c->max_attempts = 1;
-    c->chainId = 0x5; // use kovan
+    c->flags         = FLAGS_STATS | FLAGS_INCLUDE_CODE; // no autoupdate nodelist
+    for (int i = 0; i < c->chains_length; i++) c->chains[i].nodelist_upd8_params = NULL;
 }
 
