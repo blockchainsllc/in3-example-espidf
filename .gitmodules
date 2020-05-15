@@ -1,8 +1,5 @@
 [submodule "main/in3-core"]
 	path = main/in3-core
-<<<<<<< HEAD
-=======
-	branch = master
+	branch = 316-update-esp-idf-implementation-to-last-stable-in3-release
 	shallow = true
->>>>>>> 7a0fc1f1e57e99af625dd92666f3071af2b02e66
-	url = https://github.com/slockit/in3-c.git
+	url = git@git.slock.it:in3/c/in3-core.git
