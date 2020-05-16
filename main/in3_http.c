@@ -142,7 +142,7 @@ void in3_task_evm(void *pvParameters)
     // setup lock access contract address to be excuted with eth_call
     hex_to_bytes("0x36643F8D17FE745a69A2Fd22188921Fade60a98B", -1, contract, 20);
     //ask for the access to the lock
-    json_ctx_t *response = eth_call_fn(c, contract, BLKNUM_LATEST(), "hasAccess():bool");
+    json_ctx_t *response = eth_call_fn(c, contract, BLKNUM(2707918), "hasAccess():bool");
     if (!response){
         ESP_LOGI(REST_TAG, "Could not get the response: %s", eth_last_error());
     }
@@ -161,7 +161,7 @@ void in3_task_evm(void *pvParameters)
 /* Freertos task for get block number requests */    
 void in3_task_blk_number(void *pvParameters)
 {
-    eth_block_t *block = eth_getBlockByNumber(c, BLKNUM(6970454), true);
+    eth_block_t *block = eth_getBlockByNumber(c, BLKNUM(2707918), true);
     if (!block)
         ESP_LOGI(TAG, "Could not find the Block: %s\n", eth_last_error());
     else
@@ -258,7 +258,7 @@ void init_in3(void)
     c->transport = transport_esphttp; // use esp_idf_http client to handle the requests
     c->request_count = 1;           // number of requests to sendp
     //c->use_binary = 1;
-    c->proof = PROOF_FULL;
+    // c->proof = PROOF_FULL;
     c->max_attempts = 1;
     c->flags         = FLAGS_STATS | FLAGS_INCLUDE_CODE; // no autoupdate nodelist
     for (int i = 0; i < c->chains_length; i++) c->chains[i].nodelist_upd8_params = NULL;
