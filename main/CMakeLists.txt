@@ -6,10 +6,11 @@ idf_component_register(SRCS in3_main.c in3_http.c
 ADD_DEFINITIONS(-DTEST)
 ADD_DEFINITIONS(-DETH_FULL)
 ADD_DEFINITIONS(-DEVM_GAS)
-ADD_DEFINITIONS(-DESPIDF)
+ADD_DEFINITIONS(-DESP_IDF)
 ADD_DEFINITIONS(-DERR_MSG)
 OPTION(ESP_IDF "Esp-idf framework" ON)
 ADD_DEFINITIONS(-DIN3_MATH_LITE)
+add_subdirectory(in3-core/c/src/signer/pk-signer)
 add_subdirectory(in3-core/c/src/third-party/tommath)
 add_subdirectory(in3-core/c/src/third-party/crypto)
 add_subdirectory(in3-core/c/src/core)
@@ -21,6 +22,7 @@ add_subdirectory(in3-core/c/src/api/eth1)
 add_subdirectory(in3-core/c/src/api/utils)
 
 set(IN3_LIBS 
+        $<TARGET_OBJECTS:pk_signer_o>
         $<TARGET_OBJECTS:core_o>
         $<TARGET_OBJECTS:init_o>
         $<TARGET_OBJECTS:crypto_o> 
