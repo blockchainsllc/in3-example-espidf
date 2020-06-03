@@ -1,6 +1,6 @@
 /*******************************************************************************
  * This file is part of the Incubed project.
- * Sources: https://github.com/slockit/in3-c
+ * Sources: https://github.com/slockit/in3-example-espidf
  * 
  * Copyright (C) 2018-2019 slock.it GmbH, Blockchains LLC
  * 
@@ -56,15 +56,20 @@
 static int s_retry_num = 0;
 static const char *TAG = "IN3";
 
+
+
+/**
+ * ESP WIFI and local DNS
+ * **/
 /* FreeRTOS event group to signal when we are connected*/
 static EventGroupHandle_t s_wifi_event_group;
-
 /* The event group allows multiple bits for each event, but we only care about one event 
  * - are we connected to the AP with an IP? */
 const int WIFI_CONNECTED_BIT = BIT0;
-
 // start local rest http server
 esp_err_t start_rest_server(void);
+
+
 /*  Start local dns server */ 
 static void initialise_mdns(void)
 {
@@ -136,7 +141,10 @@ void wifi_init(void)
     ESP_LOGI(TAG, "connect to ap SSID:%s password:%s",
              CONFIG_WIFI_SSID, CONFIG_WIFI_PASSWORD);
 }
-/*Application main entry point*/
+
+/**
+ * Application main entry point
+ * **/
 void app_main()
 {
 

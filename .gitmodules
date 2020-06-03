@@ -1,5 +1,6 @@
 [submodule "main/in3-core"]
 	path = main/in3-core
-	branch = master
+	branch = develop
 	shallow = true
 	url = https://github.com/slockit/in3-c.git
+	

@@ -1,22 +1,4 @@
-# Embedded Devices
-
-
-## Hardware Requirements
-### Memory 
-
-
-| Memory type                 | Free size KB |
-| ------------------------ | -------- |
-| **Dynamic memory(DRAM)** | 30 - 50   |
-| **Flash Memory**         | 150 - 200   |
-
-
-### Networking
-In3 client needs to have a reliable internet connection to work properly, so your hardware must support any network interface or module that could give you access to it. i.e  Bluetooth, Wifi, ethernet, etc.
-        
 ## Incubed with ESP-IDF
-
-
 
 ### Use case example: Airbnb Property access
 
@@ -28,7 +10,7 @@ You want to enable this in your application as an example of how in3 can help yo
 
 **Hardware requirements**
 
-![from https://docs.espressif.com/projects/esp-idf/en/stable/get-started/](https://git.slock.it/hardware/esp_idf/in3-espidf/raw/master/embedded_esp.png)
+![hardware_requirements](./embedded_esp.png)
 
 
 * [ESP32-DevKitC V4](https://docs.espressif.com/projects/esp-idf/en/latest/hw-reference/get-started-devkitc.html) or similar dev board
@@ -70,7 +52,7 @@ contract Access {
 **How it works**
 
 
-![sequence diagram](https://git.slock.it/hardware/esp_idf/in3-espidf/raw/master/embedded_diagram.png)
+![sequence diagram](./embedded_diagram.png)
 
 
 In3 will support a wide range of microcontrollers, in this guide we will use well-known esp32 with freertos framework, and an example android app to interact with it via Wifi connection. 
@@ -78,7 +60,7 @@ In3 will support a wide range of microcontrollers, in this guide we will use wel
 **Instalation instructions**
 1. Clone the repo
 
-`git clone --recursive https://github.com/slockit/in3-devices-esp `
+`git clone --recursive https://github.com/slockit/in3-example-espidf`
 
 
 2. Deploy the contract with your favorite tool (truffle, etc) or use our previusly deployed contract on goerli, with address `0x36643F8D17FE745a69A2Fd22188921Fade60a98B`
