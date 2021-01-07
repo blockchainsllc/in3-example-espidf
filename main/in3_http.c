@@ -87,7 +87,7 @@ esp_err_t s_http_event_handler(esp_http_client_event_t *evt)
         ESP_LOGI(TAG, "HTTP_EVENT_ON_HEADER, key=%s, value=%s", evt->header_key, evt->header_value);
         break;
     case HTTP_EVENT_ON_DATA:
-        ESP_LOGI(TAG, "DATA %s \n", (char *)evt->data);
+        // ESP_LOGI(TAG, "DATA %s \n", (char *)evt->data);
         // fill the http response buffer with the http data chunks
         sb_add_range(http_in3_buffer, (char *)evt->data, 0, evt->data_len);
         break;
