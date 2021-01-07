@@ -51,6 +51,7 @@
 #include <in3/log.h>      // logging functions
 #include <in3/signer.h>   // default signer implementation
 #include <in3/utils.h>
+#include <in3/plugin.h>
 #include <stdio.h>
 
 #include <in3/stringbuilder.h> // stringbuilder tool for dynamic memory string handling
@@ -86,6 +87,7 @@ esp_err_t s_http_event_handler(esp_http_client_event_t *evt)
         ESP_LOGI(TAG, "HTTP_EVENT_ON_HEADER, key=%s, value=%s", evt->header_key, evt->header_value);
         break;
     case HTTP_EVENT_ON_DATA:
+        ESP_LOGI(TAG, "DATA %s \n", (char *)evt->data);
         // fill the http response buffer with the http data chunks
         sb_add_range(http_in3_buffer, (char *)evt->data, 0, evt->data_len);
         break;
@@ -142,7 +144,7 @@ void in3_task_evm(void *pvParameters)
     // setup lock access contract address to be excuted with eth_call
     hex_to_bytes("0x36643F8D17FE745a69A2Fd22188921Fade60a98B", -1, contract, 20);
     //ask for the access to the lock
-    json_ctx_t *response = eth_call_fn(c, contract, BLKNUM(2707918), "hasAccess():bool");
+    json_ctx_t *response = eth_call_fn(c, contract, BLKNUM_LATEST(), "hasAccess():bool");
     if (!response){
         ESP_LOGI(REST_TAG, "Could not get the response: %s", eth_last_error());
     }
@@ -161,7 +163,7 @@ void in3_task_evm(void *pvParameters)
 /* Freertos task for get block number requests */    
 void in3_task_blk_number(void *pvParameters)
 {
-    eth_block_t *block = eth_getBlockByNumber(c, BLKNUM(2707918), true);
+    eth_block_t *block = eth_getBlockByNumber(c, BLKNUM_LATEST(), true);
     if (!block)
         ESP_LOGI(TAG, "Could not find the Block: %s\n", eth_last_error());
     else
@@ -232,35 +234,31 @@ esp_err_t start_rest_server(void)
     }
     return ESP_OK;
 }
-/**
- * In3 Setup and usage
- * **/
-/* Perform in3 requests for http transport */
-static in3_ret_t transport_esphttp(in3_request_t* req)
-{
+
+in3_ret_t transport_esphttp(char** urls, int urls_len, char* payload, in3_response_t* result) {
     ESP_LOGI(REST_TAG, "in 3 transport");
-    
-    for (int i = 0; i < req->urls_len; i++){
-        ESP_LOGI(REST_TAG, "url:%s \n payload:%s \n", req->urls[i], req->payload);
-        send_request( req->urls[i], req->payload);
-        sb_add_range(&req->results[i].result, http_in3_buffer->data, 0, http_in3_buffer->len);
-    }
-    return 0;
-}
-/* Setup and init in3 */
-void init_in3(void)
-{
-    in3_log_set_quiet(false);
-    in3_log_set_level(LOG_TRACE);
-    // in3_register_eth_full();
-    // init in3
-    c = in3_for_chain(ETH_CHAIN_ID_GOERLI);
-    c->transport = transport_esphttp; // use esp_idf_http client to handle the requests
-    c->request_count = 1;           // number of requests to sendp
-    //c->use_binary = 1;
-    // c->proof = PROOF_FULL;
-    c->max_attempts = 1;
-    c->flags         = FLAGS_STATS | FLAGS_INCLUDE_CODE; // no autoupdate nodelist
-    for (int i = 0; i < c->chains_length; i++) c->chains[i].nodelist_upd8_params = NULL;
+  for (int i = 0; i < urls_len; i++) {
+    result[i].state = IN3_OK;
+    send_request(urls[i], payload); 
+    sb_add_range(&(result[i].data), http_in3_buffer->data, 0, http_in3_buffer->len);
+  }
+  return IN3_OK;
 }
 
+in3_ret_t transport_esp(void* plugin_data, in3_plugin_act_t action, void* plugin_ctx) {
+  in3_request_t* req = plugin_ctx;
+  return transport_esphttp((char**) req->urls, req->urls_len, req->payload, req->ctx->raw_response);
+}
+
+
+/* Setup and init in3 */
+void init_in3(void) {
+  c = in3_for_chain(CHAIN_ID_GOERLI);
+  in3_log_set_quiet(false);
+  in3_log_set_level(LOG_TRACE);
+  plugin_register(c, PLGN_ACT_TRANSPORT, transport_esp, NULL, true);
+  c->request_count = 1; // number of requests to sendp
+  c->max_attempts  = 1;
+  c->flags         = FLAGS_STATS | FLAGS_INCLUDE_CODE; // no autoupdate nodelist
+  for (int i = 0; i < c->chains_length; i++) c->chains[i].nodelist_upd8_params = NULL;
+}
