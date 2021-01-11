@@ -1,7 +1,7 @@
 idf_component_register(SRCS in3_main.c in3_http.c
                     INCLUDE_DIRS "in3-core" 
                     INCLUDE_DIRS ".")
-
+include(in3-core/c/macro.cmake)
 
 ADD_DEFINITIONS(-DTEST)
 ADD_DEFINITIONS(-DETH_FULL)
@@ -10,6 +10,7 @@ ADD_DEFINITIONS(-DESP_IDF)
 ADD_DEFINITIONS(-DERR_MSG)
 OPTION(ESP_IDF "Esp-idf framework" ON)
 ADD_DEFINITIONS(-DIN3_MATH_LITE)
+ADD_DEFINITIONS(-DIN3_EXPORT_TEST=static)
 add_subdirectory(in3-core/c/src/signer/pk-signer)
 add_subdirectory(in3-core/c/src/third-party/tommath)
 add_subdirectory(in3-core/c/src/third-party/crypto)
