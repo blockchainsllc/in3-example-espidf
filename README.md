@@ -93,7 +93,7 @@ take note if your ip address which will be used in the android application examp
 
 7. Clone the android repository, compile the android application and install the in3 demo application in your phone. 
 
-`git clone https://github.com/slockit/in3-android-example`
+`git clone https://github.com/slockit/in3-example-esp-android`
 
 
 8. Modify the android source changing ip address variable inside kotlin source file `MainActivity.kt`, with the IP address found on step 6.
